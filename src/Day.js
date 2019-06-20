@@ -16,7 +16,6 @@ class Day extends Component {
                         <Card pic={pic2} name='afrooo'/>
                         <Card pic={pic2} name='afroo'/>
                         <Card pic={pic1} name='ross'/>
-
                     </div>
             </div>
         )

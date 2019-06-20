@@ -244,22 +244,6 @@ h4 {
 h5 {
   font-size: 1rem; }
 
-@media (min-width: 600px) {
-  h1:not(:first-child),
-  h2:not(:first-child),
-  h3:not(:first-child) {
-    margin-top: 2.5rem; }
-  h1 {
-    font-size: 2.25rem; }
-  h2 {
-    font-size: 2rem; }
-  h3 {
-    font-size: 1.75rem; }
-  h4 {
-    font-size: 1.5rem; }
-  h5 {
-    font-size: 1.25rem; } }
-
 a {
   color: #0366EE;
   text-decoration: none; }
@@ -355,12 +339,32 @@ dd {
 
 /* Custom classes
 =============== */
+
+/* main container for content & sidebar */
+.page {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* content here */
+.content {
+  flex: 75%;
+  background-color: #ffffff;
+  padding: 2em;
+}
+
+.sidebar {
+  flex: 25%;
+  background-color: #e6e6e6;
+  padding: 1em;
+}
+
 .nav-container {
   box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
   width: 100%;
   position: sticky;
   top: 0px;
-  background-color: #f09723;
+  background-color: #4a52c0;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -380,7 +384,7 @@ dd {
   transform: translate(-50%, -50%); }
 
 .backdrop {
-  background-color: rgba(48, 49, 48, 0.42);
+  background-color: rgba(48, 49, 48, 0.6);
   height: 100%;
   width: 100%;
   transition: all 1.3s; }
@@ -394,7 +398,7 @@ dd {
 .day {
   max-width: 1200px;
   text-align: left;
-  margin-bottom: 3em; }
+  margin-bottom: 2em; }
 
 .pic {
   width: 120px;
@@ -517,8 +521,11 @@ dd {
 .margin-bottom {
   margin-bottom: 2rem; }
 
-.margin-left {
-    margin-left: 1em; }
+.margin-left-small {
+    margin-left: 0.75em; }
+
+.margin-left-large {
+      margin-left: 1.5em; }
 
 .alternate-background {
   background: #fafafa;
