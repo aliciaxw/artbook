@@ -209,12 +209,6 @@ h5 {
   font-weight: 600;
   font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
   line-height: 1.2; }
-  h1:not(:first-child),
-  h2:not(:first-child),
-  h3:not(:first-child),
-  h4:not(:first-child),
-  h5:not(:first-child) {
-    margin: 1.5rem 0; }
 
 h1,
 h2,
@@ -223,11 +217,6 @@ h4 {
   color: #404040; }
 h5 {
   color: #f8f8f8; }
-
-h1:not(:first-child),
-h2:not(:first-child),
-h3:not(:first-child) {
-  margin-top: 2rem; }
 
 h1 {
   font-size: 1.75rem; }
@@ -355,7 +344,7 @@ dd {
 
 .sidebar {
   flex: 25%;
-  background-color: #e6e6e6;
+  background-color: #eeeeee;
   padding: 1em;
 }
 
@@ -636,7 +625,7 @@ a.full-button {
   border-radius: 4px;
   padding: .75rem;
   outline: none;
-  background: transparent;
+  background: white;
   margin-bottom: .5rem;
   font-size: 1rem;
   width: 100%;

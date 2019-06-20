@@ -2,9 +2,16 @@ import React, { Component } from 'react'
 import Day from './Day'
 import Nav from './Nav'
 import Table from './Table'
+import Form from './Form'
 
 class Book extends Component {
-    state = {}
+    state = {
+        isFormOpen: false
+    }
+
+    toggleForm = () => {
+        this.setState({ isFormOpen: !this.state.isFormOpen })
+    }
 
     render() {
         const { groups } = { groups: {'wang': ['3'], 'wangers':['1'], 'mango': ['2.75']} };
@@ -16,9 +23,10 @@ class Book extends Component {
                         <table>
                             <tr>
                             <td><button>Add artist</button></td>
-                            <td><button>Add page</button></td>
+                            <td><button onClick={this.toggleForm}>Add page</button></td>
                             </tr>
                         </table>
+                        {this.state.isFormOpen && <Form />}
                         <Table data={groups}/>
 
                     </div>
