@@ -8,10 +8,10 @@ class Day extends Component {
         const { date } = this.props
         return (
             <div className='day'>
-                    <h4>{date}</h4>
+                    <h3>{date}</h3>
                     <div className='flex-row'>
                         <Card pic={pic1} name='ross'/>
-                        <Card pic={pic2} name='afroooooooooooooooooooooooooooooooo'/>
+                        <Card pic={pic2} name='afrooo'/>
                         <Card pic={pic1} name='ross'/>
                         <Card pic={pic1} name='ross'/>
                         <Card pic={pic2} name='afrooo'/>
