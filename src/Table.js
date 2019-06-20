@@ -19,7 +19,7 @@ const TableHeader = () => {
         <thead>
             <tr>
                 <th>Name</th>
-                <th>Members</th>
+                <th>Pages</th>
             </tr>
         </thead>
     )

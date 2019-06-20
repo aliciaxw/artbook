@@ -11,7 +11,7 @@ class App extends Component {
     // takes in Form state
     addGroup = formState => {
         this.setState({
-            groups: { ...this.state.groups, [formState.name]:['wang', 'zeng', 'amet'] } // temp hardcoded data
+            groups: { ...this.state.groups, [formState.name]:['wang', 'wangers', 'mango'] } // temp hardcoded data
         });
     }
 

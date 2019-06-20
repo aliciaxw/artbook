@@ -5,9 +5,10 @@ import pic2 from './images/sample2.JPG'
 
 class Day extends Component {
     render() {
+        const { date } = this.props
         return (
             <div className='day'>
-                    <h4>Wednesday June 19 2019</h4>
+                    <h4>{date}</h4>
                     <div className='flex-row'>
                         <Card pic={pic1} name='ross'/>
                         <Card pic={pic2} name='afroooooooooooooooooooooooooooooooo'/>

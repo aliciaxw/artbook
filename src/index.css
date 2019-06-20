@@ -359,12 +359,17 @@ dd {
   padding: 1em;
 }
 
+/* keep items within sidebar fixed */
+.sidebar-wrapper {
+  /* position: fixed; */
+}
+
 .nav-container {
-  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.15);
   width: 100%;
   position: sticky;
   top: 0px;
-  background-color: #4a52c0;
+  background-color: #0366EE;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
