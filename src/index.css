@@ -208,14 +208,21 @@ h5 {
   margin: 1.5rem 0;
   font-weight: 600;
   font-family: -apple-system, BlinkMacSystemFont, Helvetica Neue, Helvetica, Arial, sans-serif;
-  line-height: 1.2;
-  color: #404040; }
+  line-height: 1.2; }
   h1:not(:first-child),
   h2:not(:first-child),
   h3:not(:first-child),
   h4:not(:first-child),
   h5:not(:first-child) {
     margin: 1.5rem 0; }
+
+h1,
+h2,
+h3,
+h4 {
+  color: #404040; }
+h5 {
+  color: #f8f8f8; }
 
 h1:not(:first-child),
 h2:not(:first-child),
@@ -353,7 +360,7 @@ dd {
   width: 100%;
   position: sticky;
   top: 0px;
-  background-color: #f9b159;
+  background-color: #f09723;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -364,6 +371,25 @@ dd {
   width: 140px;
   text-align: center;
   overflow-wrap: break-word; }
+
+.backdrop,
+.modal {
+  top: 50%;
+  left: 50%;
+  position: fixed;
+  transform: translate(-50%, -50%); }
+
+.backdrop {
+  background-color: rgba(48, 49, 48, 0.42);
+  height: 100%;
+  width: 100%;
+  transition: all 1.3s; }
+
+.modal {
+  height: 500px;
+  width: 500px;
+  display: inline-block;
+  object-fit: contain; }
 
 .day {
   max-width: 1200px;
