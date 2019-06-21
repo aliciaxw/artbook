@@ -14,6 +14,7 @@ class Form extends Component {
             artist: '',
             date: curDateStr,
             pages: 1,
+            upload: null,
         };
 
         this.state = this.initialState;
@@ -51,24 +52,29 @@ class Form extends Component {
     }
 
     render() {
-        const { artist, date, pages } = this.state;
+        const { artist, date, pages, upload } = this.state;
+        const { artists } = this.props;
+
+        const rows = artists.map((row, index) => {
+            return <option value={row} key={index}>{row}</option>
+        })
 
         return (
-            <table><tbody><tr><td>
+            <table><tbody><tr><td style={{padding:0}}>
                 <h2>Add new page</h2>
                 <form>
                     <label>Artist</label>
                     <select name='artist' value={artist} onChange={this.handleChangeArtist}>
-                        <option value='wang'>wang</option>
-                        <option value='zeng'>zeng</option>
-                        <option value='amet'>amet</option>
+                        {rows}
                     </select>
+
                     <label>Date</label>
                     <input
                         type="date"
                         name="date"
                         value={date}
                         onChange={this.handleChangeDate} />
+
                     <label>Pages</label>
                     <input
                         type="number"
@@ -76,8 +82,10 @@ class Form extends Component {
                         value={pages}
                         onChange={this.handleChangePages} />
 
-                    <input type='button' value='Submit' onClick={this.submitForm} />
+                    <label>Upload</label>
+                    <input type='file' name='upload' accept='image/*' />
 
+                    <input type='button' value='Submit' onClick={this.submitForm} />
                 </form>
             </td></tr></tbody></table>
         )

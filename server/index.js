@@ -26,7 +26,7 @@ app.get('/api/getArtists', (req, res) => {
 
 app.post('/api/addArtist', (req, res) => {
     const artist = req.body.artist
-    if (artist) {
+    if (artist && !artists.includes(artist)) {
         artists.push(artist)
         res.send('POST: artist ' + artist)
     }
