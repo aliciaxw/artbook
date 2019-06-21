@@ -32,6 +32,11 @@ app.post('/api/addArtist', (req, res) => {
     }
 })
 
+// TODO
+app.post('/api/addPage', (req, res) => {
+    res.send('TODO')
+})
+
 // handles other requests
 app.get('*', (req,res) =>{
     res.json('Not a route!');

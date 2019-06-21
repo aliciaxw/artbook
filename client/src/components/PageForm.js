@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Form extends Component {
+class PageForm extends Component {
     constructor(props) {
         super(props);
 
@@ -46,7 +46,6 @@ class Form extends Component {
     }
 
     submitForm = () => {
-        console.log('button pressed');
         this.props.handleSubmit(this.state); // adds person to App state
         this.setState(this.initialState); // clears Form state
     }
@@ -60,7 +59,7 @@ class Form extends Component {
         })
 
         return (
-            <table><tbody><tr><td style={{padding:0}}>
+            <div>
                 <h2>Add new page</h2>
                 <form>
                     <label>Artist</label>
@@ -87,12 +86,12 @@ class Form extends Component {
 
                     <input type='button' value='Submit' onClick={this.submitForm} />
                 </form>
-            </td></tr></tbody></table>
+            </div>
         )
     }
 }
 
-export default Form;
+export default PageForm;
 
 /*
                     <label>Artist</label>
