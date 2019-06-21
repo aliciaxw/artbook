@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Card from './Card'
-import pic1 from './images/sample.jpg'
-import pic2 from './images/sample2.JPG'
+import pic1 from '../images/sample.jpg'
+import pic2 from '../images/sample2.JPG'
 
 class Day extends Component {
     render() {
