@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import Table from '../components/Table';
-import Form from '../components/Form';
-import Nav from '../components/Nav';
+import React, { Component } from 'react'
+import Table from '../components/Table'
+import Form from '../components/Form'
+import Nav from '../components/Nav'
 
+/* Plan for creating new books. Far off TODO */
 class App extends Component {
     state = {
         groups: {}, // map of groups to list of members
@@ -12,11 +13,11 @@ class App extends Component {
     addGroup = formState => {
         this.setState({
             groups: { ...this.state.groups, [formState.name]:['wang', 'wangers', 'mango'] } // temp hardcoded data
-        });
+        })
     }
 
     render() {
-        const { groups } = this.state;
+        const { groups } = this.state
         return (
             <div>
                 <Nav />

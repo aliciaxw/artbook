@@ -1,29 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class ArtistForm extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
         this.initialState = {
             artist: ''
-        };
+        }
 
-        this.state = this.initialState;
+        this.state = this.initialState
     }
 
     // updates input value on change
     handleChangeArtist = event => {
-        const { value } = event.target;
+        const { value } = event.target
         this.setState({ artist: value })
     }
 
     submitForm = () => {
-        this.props.handleSubmit(this.state); // adds person to App state
-        this.setState(this.initialState); // clears Form state
+        this.props.handleSubmit(this.state) // adds person to App state
+        this.setState(this.initialState) // clears Form state
     }
 
     render() {
-        const { artist } = this.state;
+        const { artist } = this.state
 
         return (
             <div>
@@ -43,4 +43,4 @@ class ArtistForm extends Component {
     }
 }
 
-export default ArtistForm;
+export default ArtistForm

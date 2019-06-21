@@ -71,7 +71,7 @@ class Sidebar extends Component {
         const leaderboard = {}
         artists.forEach(name => {
             leaderboard[name] = ['0']
-        });
+        })
         const { groups } = { groups: leaderboard }
 
         return (

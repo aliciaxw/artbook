@@ -30,4 +30,4 @@ const Content = () => {
     )
 }
 
-export default Book;
+export default Book

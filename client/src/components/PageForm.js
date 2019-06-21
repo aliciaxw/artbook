@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 
 class PageForm extends Component {
     constructor(props) {
-        super(props);
+        super(props)
 
-        const curDate = new Date();
+        const curDate = new Date()
         const yyyy = curDate.getFullYear()
         const mm = ("0" + (curDate.getMonth()+1)).slice(-2)
         const dd = ("0" + curDate.getDate()).slice(-2)
@@ -15,14 +15,14 @@ class PageForm extends Component {
             date: curDateStr,
             pages: 1,
             upload: null,
-        };
+        }
 
-        this.state = this.initialState;
+        this.state = this.initialState
     }
 
     // updates input value on change
     handleChangeArtist = event => {
-        const { value } = event.target;
+        const { value } = event.target
         this.setState({
             ...this.state,
             artist: value,
@@ -30,7 +30,7 @@ class PageForm extends Component {
     }
 
     handleChangeDate = event => {
-        const { value } = event.target;
+        const { value } = event.target
         this.setState({
             ...this.state,
             date: value,
@@ -38,7 +38,7 @@ class PageForm extends Component {
     }
 
     handleChangePages = event => {
-        const { value } = event.target;
+        const { value } = event.target
         this.setState({
             ...this.state,
             pages: value,
@@ -46,13 +46,13 @@ class PageForm extends Component {
     }
 
     submitForm = () => {
-        this.props.handleSubmit(this.state); // adds person to App state
-        this.setState(this.initialState); // clears Form state
+        this.props.handleSubmit(this.state) // adds person to App state
+        this.setState(this.initialState) // clears Form state
     }
 
     render() {
-        const { artist, date, pages, upload } = this.state;
-        const { artists } = this.props;
+        const { artist, date, pages, upload } = this.state
+        const { artists } = this.props
 
         const rows = artists.map((row, index) => {
             return <option value={row} key={index}>{row}</option>
@@ -91,13 +91,4 @@ class PageForm extends Component {
     }
 }
 
-export default PageForm;
-
-/*
-                    <label>Artist</label>
-                    <input
-                        type="text"
-                        name="artist"
-                        value={artist}
-                        onChange={this.handleChangeArtist} />
-                        */
+export default PageForm

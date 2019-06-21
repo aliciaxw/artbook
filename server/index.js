@@ -39,10 +39,10 @@ app.post('/api/addPage', (req, res) => {
 
 // handles other requests
 app.get('*', (req,res) =>{
-    res.json('Not a route!');
-});
+    res.json('Not a route!')
+})
 
-const port = process.env.PORT || 5000;
-app.listen(port);
+const port = process.env.PORT || 5000
+app.listen(port)
 
 console.log('App is listening on port ' + port)

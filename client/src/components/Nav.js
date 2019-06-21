@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import logo from '../images/image.png';
+import React, { Component } from 'react'
+import logo from '../images/image.png'
 
 class Nav extends Component {
     render() {
@@ -12,4 +12,4 @@ class Nav extends Component {
     }
 }
 
-export default Nav;
+export default Nav
