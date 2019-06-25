@@ -96,7 +96,7 @@ app.post('/api/addArtist', (req, res) => {
 app.post('/api/addDrawing/:name', (req, res) => {
     name = req.params.name
     image = req.body.image
-    pages = req.body.pages
+    pages = Number(req.body.pages)
     date = req.body.date
 
     if (!users[name]) {

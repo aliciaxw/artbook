@@ -10,11 +10,13 @@ class PageForm extends Component {
         const dd = ("0" + curDate.getDate()).slice(-2)
         const curDateStr = yyyy + '-' + mm + '-' + dd
 
+        const name = props.leaderboard.length!==0 ? props.leaderboard[0][0] : ''
+
         this.initialState = {
-            artist: '',
+            artist: name,
             date: curDateStr,
             pages: 1,
-            upload: null,
+            upload: '../images/test.jpg',
         }
 
         this.state = this.initialState
@@ -38,7 +40,8 @@ class PageForm extends Component {
     }
 
     handleChangePages = event => {
-        const { value } = event.target
+        let { value } = event.target
+        if (value < 0) value = 0
         this.setState({
             ...this.state,
             pages: value,
@@ -51,11 +54,12 @@ class PageForm extends Component {
     }
 
     render() {
+        console.log(this.state)
         const { artist, date, pages, upload } = this.state
-        const { artists } = this.props
+        const { leaderboard } = this.props
 
-        const rows = artists.map((row, index) => {
-            return <option value={row} key={index}>{row}</option>
+        const rows = leaderboard.map((row, index) => {
+            return <option value={row[0]} key={index}>{row[0]}</option>
         })
 
         return (

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-// class component
+// class component, expects data to be an array of arrays
 class Table extends Component {
     render() {
         const { data } = this.props // contains this.props.data
@@ -25,13 +25,17 @@ const TableHeader = () => {
     )
 }
 
+/*
+    Expecting a table with two columns
+*/
 const TableBody = props => {
     const rows = Object.keys(props.data).map((row, index) => {
-        const members = props.data[row].join(', ')
+        const col1 = props.data[row][0]
+        const col2 = props.data[row][1]
         return (
             <tr key={index}>
-                <td>{row}</td>
-                <td>{members}</td>
+                <td>{col1}</td>
+                <td>{col2}</td>
             </tr>
         )
     })

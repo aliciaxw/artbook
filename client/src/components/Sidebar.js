@@ -7,18 +7,18 @@ class Sidebar extends Component {
     state = {
         isPageFormOpen: false,
         isArtistFormOpen: false,
-        artists: []
+        leaderboard: []
     }
 
     componentDidMount() {
-        this.getArtists()
+        this.getLeaderboard()
     }
 
-    getArtists = () => {
-        console.log('get artists')
-        fetch('/api/getArtists')
+    getLeaderboard = () => {
+        console.log('get leaderboard')
+        fetch('/api/getLeaderboard')
         .then(res => res.json())
-        .then(artists => this.setState({ ...this.state, artists }))
+        .then(leaderboard => this.setState({ ...this.state, leaderboard }))
     }
 
     togglePageForm = () => {
@@ -38,16 +38,20 @@ class Sidebar extends Component {
     }
 
     submitPageForm = formState => {
-        fetch('http://localhost:5000/api/addPage', {
+        const url = 'http://localhost:5000/api/addDrawing/' + formState.artist
+        console.log('form artist: ' + formState.artist)
+        fetch(url, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                artist: formState.artist,
+                image: formState.image,
+                pages: formState.pages,
+                date: formState.date
             })
-        })
+        }).then(res => this.getLeaderboard())
     }
 
     submitArtistForm = formState => {
@@ -61,17 +65,12 @@ class Sidebar extends Component {
             body: JSON.stringify({
                 artist: formState.artist,
             })
-        }).then(res => this.getArtists()) // retrieve table data
-        console.log(this.state.artists)
+        }).then(res => this.getLeaderboard()) // retrieve table data
     }
 
     render() {
-        const { isPageFormOpen, isArtistFormOpen, artists } = this.state
+        const { isPageFormOpen, isArtistFormOpen, leaderboard } = this.state
 
-        const leaderboard = {}
-        artists.forEach(name => {
-            leaderboard[name] = ['0']
-        })
         const { groups } = { groups: leaderboard }
 
         return (
@@ -80,7 +79,7 @@ class Sidebar extends Component {
                     <td><button onClick={this.toggleArtistForm}>Add artist</button></td>
                     <td><button onClick={this.togglePageForm}>Add page</button></td>
                     </tr></tbody></table>
-                {isPageFormOpen && <PageForm handleSubmit={this.submitPageForm} artists={this.state.artists} />}
+                {isPageFormOpen && <PageForm handleSubmit={this.submitPageForm} leaderboard={this.state.leaderboard} />}
                 {isArtistFormOpen && <ArtistForm handleSubmit={this.submitArtistForm} />}
                 <Table data={groups}/>
             </div>
