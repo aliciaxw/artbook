@@ -1,4 +1,9 @@
 import React, { Component } from 'react'
+import Dropzone from 'react-dropzone'
+import request from 'superagent'
+
+const CLOUDINARY_UPLOAD_PRESET = 'artbook'
+const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/aliciaxw/image/upload'
 
 class PageForm extends Component {
     constructor(props) {
@@ -16,7 +21,7 @@ class PageForm extends Component {
             artist: name,
             date: curDateStr,
             pages: 1,
-            upload: '../images/test.jpg',
+            upload: ''
         }
 
         this.state = this.initialState
@@ -48,6 +53,26 @@ class PageForm extends Component {
         })
     }
 
+    // uploads image to Cloudinary, sets the image URL
+    // TODO: move this to form submission
+    onImageDrop = files => {
+        console.log('image dropped')
+
+        let upload = request.post(CLOUDINARY_UPLOAD_URL)
+                            .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+                            .field('file', files[0])
+
+        upload.end((err, res) => {
+            if (err) console.error(err)
+            if (res.body.secure_url !== '') {
+                this.setState({
+                    ...this.state,
+                    upload: res.body.secure_url
+                })
+            }
+        })
+    }
+
     submitForm = () => {
         this.props.handleSubmit(this.state) // adds person to App state
         this.setState(this.initialState) // clears Form state
@@ -65,6 +90,22 @@ class PageForm extends Component {
         return (
             <div>
                 <h2>Add new page</h2>
+
+                {/* TODO: integrate with form */}
+                <Dropzone
+                    multiple={false}
+                    accept='image/*'
+                    onDrop={acceptedFiles => this.onImageDrop(acceptedFiles)}>
+                    {({getRootProps, getInputProps}) => (
+                        <section>
+                        <div {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <p>Click to select a file</p>
+                        </div>
+                        </section>
+                    )}
+                </Dropzone>
+
                 <form>
                     <label>Artist</label>
                     <select name='artist' value={artist} onChange={this.handleChangeArtist}>
@@ -84,9 +125,6 @@ class PageForm extends Component {
                         name="pages"
                         value={pages}
                         onChange={this.handleChangePages} />
-
-                    <label>Upload</label>
-                    <input type='file' name='upload' accept='image/*' />
 
                     <input type='button' value='Submit' onClick={this.submitForm} />
                 </form>
