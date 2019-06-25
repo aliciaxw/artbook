@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 import Dropzone from 'react-dropzone'
-import request from 'superagent'
-
-const CLOUDINARY_UPLOAD_PRESET = 'artbook'
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/aliciaxw/image/upload'
 
 class PageForm extends Component {
     constructor(props) {
@@ -11,17 +7,17 @@ class PageForm extends Component {
 
         const curDate = new Date()
         const yyyy = curDate.getFullYear()
-        const mm = ("0" + (curDate.getMonth()+1)).slice(-2)
+        const mm = ("0" + (curDate.getMonth() + 1)).slice(-2)
         const dd = ("0" + curDate.getDate()).slice(-2)
         const curDateStr = yyyy + '-' + mm + '-' + dd
 
-        const name = props.leaderboard.length!==0 ? props.leaderboard[0][0] : ''
+        const name = props.leaderboard.length !== 0 ? props.leaderboard[0][0] : ''
 
         this.initialState = {
             artist: name,
             date: curDateStr,
             pages: 1,
-            upload: ''
+            upload: null
         }
 
         this.state = this.initialState
@@ -53,29 +49,19 @@ class PageForm extends Component {
         })
     }
 
-    // uploads image to Cloudinary, sets the image URL
-    // TODO: move this to form submission
+    // Sets the state file to the dropped image
     onImageDrop = files => {
         console.log('image dropped')
-
-        let upload = request.post(CLOUDINARY_UPLOAD_URL)
-                            .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
-                            .field('file', files[0])
-
-        upload.end((err, res) => {
-            if (err) console.error(err)
-            if (res.body.secure_url !== '') {
-                this.setState({
-                    ...this.state,
-                    upload: res.body.secure_url
-                })
-            }
+        this.setState({
+            ...this.state,
+            upload: files[0]
         })
     }
 
     submitForm = () => {
-        this.props.handleSubmit(this.state) // adds person to App state
-        this.setState(this.initialState) // clears Form state
+        console.log('button pressed!')
+        this.props.handleSubmit(this.state)
+        this.setState(this.initialState)
     }
 
     render() {
@@ -96,12 +82,12 @@ class PageForm extends Component {
                     multiple={false}
                     accept='image/*'
                     onDrop={acceptedFiles => this.onImageDrop(acceptedFiles)}>
-                    {({getRootProps, getInputProps}) => (
+                    {({ getRootProps, getInputProps }) => (
                         <section>
-                        <div {...getRootProps()}>
-                            <input {...getInputProps()} />
-                            <p>Click to select a file</p>
-                        </div>
+                            <div {...getRootProps()}>
+                                <input {...getInputProps()} />
+                                {upload ? <p>{upload.name}</p> : <p>Click to select a file</p>}
+                            </div>
                         </section>
                     )}
                 </Dropzone>
