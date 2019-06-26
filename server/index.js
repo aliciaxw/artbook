@@ -11,7 +11,7 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
-  extended: true
+    extended: true
 }))
 
 /***** Models *****/
@@ -79,9 +79,15 @@ app.get('/api/getNames', (req, res) => {
 */
 app.post('/api/addArtist', (req, res) => {
     const artist = req.body.artist
-    if (artist && !Object.keys(users).includes(artist)) {
+    console.log(artist)
+
+    if (!artist) {
+        res.status(400).send('ERR: Name cannot be empty')
+    } else if (!Object.keys(users).includes(artist)) {
         users[artist] = []
         res.send('POST: artist ' + artist)
+    } else {
+        res.send('User already exists')
     }
 })
 
@@ -98,6 +104,10 @@ app.post('/api/addDrawing/:name', (req, res) => {
     image = req.body.image
     pages = Number(req.body.pages)
     date = req.body.date
+
+    if (!name || !image || !pages || !date) {
+        res.status(404).send('ERR: Missing field in body')
+    }
 
     if (!users[name]) {
         res.status(404).send('ERR: User not found')
@@ -187,7 +197,7 @@ app.get('/api/getLeaderboard', (req, res) => {
 })
 
 // handles other requests
-app.get('*', (req,res) =>{
+app.get('*', (req, res) => {
     res.json('Not a route!')
 })
 

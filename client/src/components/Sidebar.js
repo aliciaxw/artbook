@@ -7,6 +7,7 @@ import PageForm from '../components/PageForm'
 const CLOUDINARY_UPLOAD_PRESET = 'artbook'
 const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/aliciaxw/image/upload'
 
+// TODO: add error handling for client
 
 class Sidebar extends Component {
     state = {
@@ -48,6 +49,11 @@ class Sidebar extends Component {
         const image = formState.upload
         const { artist, pages, date } = formState
 
+        if (!artist || !pages || !date || !image) {
+            console.error('Missing a field!')
+            return
+        }
+
         let upload = request.post(CLOUDINARY_UPLOAD_URL)
             .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
             .field('file', image)
@@ -65,6 +71,12 @@ class Sidebar extends Component {
 
     submitArtistForm = formState => {
         console.log('submit artist form')
+        const { artist } = formState
+        if (!artist) {
+            console.error('Missing name!')
+            return
+        }
+
         fetch('http://localhost:5000/api/addArtist', {
             method: 'POST',
             headers: {
@@ -72,7 +84,7 @@ class Sidebar extends Component {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                artist: formState.artist,
+                artist: artist,
             })
         }).then(res => this.getLeaderboard()) // retrieve table data
     }
