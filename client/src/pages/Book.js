@@ -1,33 +1,34 @@
 import React, { Component } from 'react'
-import Day from '../components/Day'
+import request from 'superagent'
 import Nav from '../components/Nav'
 import Sidebar from '../components/Sidebar'
+import Content from '../components/Content'
 
 class Book extends Component {
+    state = {}
+
+    componentDidMount() {
+        this.getImages()
+    }
+
+    getImages = () => {
+        request.get('/api/getDrawingsByDate')
+            .then(res => {
+                this.setState(res.body)
+            })
+    }
+
     render() {
         return (
-            <div>
+            <div style={{ "position": "absolute", "top": 0, "bottom": 0, "left": 0, "right": 0 }}>
                 <Nav />
                 <div className='page'>
-                    <Sidebar />
-                    <Content />
+                    <Sidebar refreshImages={this.getImages} />
+                    <Content images={this.state} />
                 </div>
             </div>
         )
     }
-}
-
-const Content = () => {
-    return (
-        <div className='content'>
-            <div className='small-container'>
-                <h1>shame corner</h1>
-                <Day date="Thu 06/20/19" />
-                <Day date="Wed 06/19/19" />
-                <Day date="Tue 06/18/19" />
-            </div>
-        </div>
-    )
 }
 
 export default Book

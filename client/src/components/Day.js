@@ -1,23 +1,18 @@
 import React, { Component } from 'react'
 import Card from './Card'
-import pic1 from '../images/sample.jpg'
-import pic2 from '../images/sample2.JPG'
 
 class Day extends Component {
     render() {
-        const { date } = this.props
+        let { date, images } = this.props
+        date = new Date(date).toDateString()
         return (
             <div className='day'>
-                    <h3>{date}</h3>
-                    <div className='flex-row'>
-                        <Card pic={pic1} name='ross'/>
-                        <Card pic={pic2} name='afrooo'/>
-                        <Card pic={pic1} name='ross'/>
-                        <Card pic={pic1} name='ross'/>
-                        <Card pic={pic2} name='afrooo'/>
-                        <Card pic={pic2} name='afroo'/>
-                        <Card pic={pic1} name='ross'/>
-                    </div>
+                <h3>{date}</h3>
+                <div className='flex-row'>
+                    {images.map((img, index) => (
+                        <Card key={index} pic={img.image} name={img.artist} />
+                    ))}
+                </div>
             </div>
         )
     }

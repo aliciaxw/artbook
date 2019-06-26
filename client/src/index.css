@@ -333,6 +333,7 @@ dd {
 .page {
   display: flex;
   flex-wrap: wrap;
+  height: 100%;
 }
 
 /* content here */
@@ -346,6 +347,7 @@ dd {
   flex: 25%;
   background-color: #eeeeee;
   padding: 1em;
+  
 }
 
 /* keep items within sidebar fixed */

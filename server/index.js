@@ -51,7 +51,6 @@ app.get('/', (req, res) => {
 */
 app.get('/api/getArtists', (req, res) => {
     res.json(serializeUsers(users))
-    console.log('GET: artists')
 })
 
 /* Helper that returns an array of all artist names */
@@ -68,7 +67,6 @@ function getNames() {
 app.get('/api/getNames', (req, res) => {
     names = getNames()
     res.json(names)
-    console.log('GET: names')
 })
 
 /*
@@ -79,7 +77,6 @@ app.get('/api/getNames', (req, res) => {
 */
 app.post('/api/addArtist', (req, res) => {
     const artist = req.body.artist
-    console.log(artist)
 
     if (!artist) {
         res.status(400).send('ERR: Name cannot be empty')
@@ -129,7 +126,6 @@ function getAllDrawings() {
     Returns an array of all drawings.
 */
 app.get('/api/getDrawings', (req, res) => {
-    console.log(getAllDrawings())
     res.json(getAllDrawings().map(x => x.serialize()))
 })
 

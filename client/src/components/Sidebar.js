@@ -21,7 +21,6 @@ class Sidebar extends Component {
     }
 
     getLeaderboard = () => {
-        console.log('get leaderboard')
         fetch('/api/getLeaderboard')
             .then(res => res.json())
             .then(leaderboard => this.setState({ ...this.state, leaderboard }))
@@ -45,7 +44,6 @@ class Sidebar extends Component {
 
     // Uploads the dropped image to Cloudinary
     submitPageForm = formState => {
-        console.log('image upload')
         const image = formState.upload
         const { artist, pages, date } = formState
 
@@ -64,13 +62,13 @@ class Sidebar extends Component {
                 request.post('/api/addDrawing/' + artist)
                     .send({ image: res.body.secure_url, pages: pages, date: date })
                     .then(() => this.getLeaderboard(), res => console.error(res))
+                    .then(() => this.props.refreshImages(), res => console.error(res))
             }
         })
 
     }
 
     submitArtistForm = formState => {
-        console.log('submit artist form')
         const { artist } = formState
         if (!artist) {
             console.error('Missing name!')

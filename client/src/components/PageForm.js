@@ -51,7 +51,6 @@ class PageForm extends Component {
 
     // Sets the state file to the dropped image
     onImageDrop = files => {
-        console.log('image dropped')
         this.setState({
             ...this.state,
             upload: files[0]
@@ -59,13 +58,11 @@ class PageForm extends Component {
     }
 
     submitForm = () => {
-        console.log('button pressed!')
         this.props.handleSubmit(this.state)
         this.setState(this.initialState)
     }
 
     render() {
-        console.log(this.state)
         const { artist, date, pages, upload } = this.state
         const { leaderboard } = this.props
 
