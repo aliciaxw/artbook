@@ -75,7 +75,7 @@ class Sidebar extends Component {
             return
         }
 
-        fetch('http://localhost:5000/api/addArtist', {
+        fetch('/api/addArtist', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
