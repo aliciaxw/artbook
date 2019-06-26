@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const path = require('path')
-// const User = require('./User.js')
+const { Pool } = require('pg')
 const Drawing = require('./Drawing')
 
 const app = express()
@@ -14,12 +14,54 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
     extended: true
 }))
 
+/***** Database *****/
+
+const connectionString = 'postgres://210499@localhost:5432/210499'
+
+const pool = new Pool({
+    connectionString: connectionString //process.env.DATABASE_URL
+    // ssl: true
+})
+
+pool.connect((err) => {
+    if (err) {
+        console.error(err)
+    } else {
+        console.log('connected to ' + process.env.DATABASE_URL)
+
+        // initialize tables if not exist
+        const usersQuery = 'CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, img TEXT NOT NULL);'
+        const drawingsQuery = `CREATE TABLE IF NOT EXISTS drawings (
+            id SERIAL PRIMARY KEY,
+            artist INT NOT NULL,
+            pages FLOAT NOT NULL,
+            date VARCHAR(255) NOT NULL,
+            FOREIGN KEY (artist) REFERENCES users(id) ON DELETE CASCADE
+        );`
+
+        // TODO reformat this...
+        pool.query(usersQuery)
+        .then(res => {
+            console.log('users table created')
+            pool.query(drawingsQuery)
+            .then(res => console.log('drawings table created')).catch(err=>console.error(err))
+        })
+        .catch(err => console.error(err))
+    }
+})
+
+// TODO redo all routes but with a postgres
+app.get('/api/getArtists', (req, res) => {
+    pool.query('SELECT * FROM users;', (err, response) => {
+        if (err) throw err
+        res.status(200).json(response.rows)
+    })
+})
+
 /***** Models *****/
 
 const users = { // mapping of user name to array of drawings
-    wang: [],
-    wango: [],
-    mango: []
+    wang: []
 }
 
 /*
@@ -49,9 +91,11 @@ app.get('/', (req, res) => {
 /*
     Returns the users object.
 */
+/*
 app.get('/api/getArtists', (req, res) => {
     res.json(serializeUsers(users))
 })
+*/
 
 /* Helper that returns an array of all artist names */
 function getNames() {
