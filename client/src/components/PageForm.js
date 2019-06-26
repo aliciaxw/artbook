@@ -74,7 +74,7 @@ class PageForm extends Component {
             <div>
                 <h2>Add new page</h2>
 
-                {/* TODO: integrate with form */}
+                <div className='button'>
                 <Dropzone
                     multiple={false}
                     accept='image/*'
@@ -83,11 +83,12 @@ class PageForm extends Component {
                         <section>
                             <div {...getRootProps()}>
                                 <input {...getInputProps()} />
-                                {upload ? <p>{upload.name}</p> : <p>Click to select a file</p>}
+                                {upload ? <b>{upload.name}</b> : <b>Click to select a file</b>}
                             </div>
                         </section>
                     )}
                 </Dropzone>
+                </div>
 
                 <form>
                     <label>Artist</label>

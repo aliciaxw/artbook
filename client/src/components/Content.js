@@ -9,7 +9,7 @@ class Content extends Component {
                 <div className='small-container'>
                     <h1>shame corner</h1>
                     <div>
-                        {Object.keys(images).map(date => (
+                        {Object.keys(images).sort().reverse().map(date => (
                             <Day key={date} date={date} images={images[date]} />
                         ))}
                     </div>

@@ -4,7 +4,7 @@ import Card from './Card'
 class Day extends Component {
     render() {
         let { date, images } = this.props
-        date = new Date(date).toDateString()
+        date = new Date(date + ' EST').toDateString()
         return (
             <div className='day'>
                 <h3>{date}</h3>

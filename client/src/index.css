@@ -219,7 +219,7 @@ h5 {
   color: #f8f8f8; }
 
 h1 {
-  font-size: 1.75rem; }
+  font-size: 2rem; }
 
 h2 {
   font-size: 1.5rem; }
@@ -347,7 +347,7 @@ dd {
   flex: 25%;
   background-color: #eeeeee;
   padding: 1em;
-  
+
 }
 
 /* keep items within sidebar fixed */
@@ -395,8 +395,8 @@ dd {
   transition: all 1.3s; }
 
 .modal {
-  height: 500px;
-  width: 500px;
+  height: 80%;
+  width: 80%;
   display: inline-block;
   object-fit: contain; }
 
@@ -557,6 +557,7 @@ dd {
   font-size: 1rem;
   text-transform: none;
   padding: .75rem 1.25rem;
+  width: 100%;
   margin: 0 0 .5rem 0;
   vertical-align: middle;
   text-align: center;
