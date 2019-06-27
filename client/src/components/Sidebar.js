@@ -4,11 +4,6 @@ import Table from '../components/Table'
 import ArtistForm from '../components/ArtistForm'
 import PageForm from '../components/PageForm'
 
-const CLOUDINARY_UPLOAD_PRESET = 'artbook'
-const CLOUDINARY_UPLOAD_URL = 'https://api.cloudinary.com/v1_1/aliciaxw/image/upload'
-
-// TODO: add error handling for client
-
 class Sidebar extends Component {
     state = {
         isPageFormOpen: false,
@@ -52,8 +47,8 @@ class Sidebar extends Component {
             return
         }
 
-        let upload = request.post(CLOUDINARY_UPLOAD_URL)
-            .field('upload_preset', CLOUDINARY_UPLOAD_PRESET)
+        let upload = request.post(process.env.REACT_APP_CLOUDINARY_UPLOAD_URL)
+            .field('upload_preset', process.env.REACT_APP_CLOUDINARY_UPLOAD_PRESET)
             .field('file', image)
 
         upload.end((err, res) => {
