@@ -231,7 +231,7 @@ app.get('/api/getLeaderboard', async (req, res) => {
 
 // handles other requests
 app.get('*', (req, res) => {
-    res.status(404)send('Not a valid route!')
+    res.status(404).send('Not a valid route!')
 })
 
 const port = process.env.PORT || 5000
