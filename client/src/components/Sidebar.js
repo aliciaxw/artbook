@@ -100,6 +100,7 @@ class Sidebar extends Component {
                 </tr></tbody></table>
                 {isPageFormOpen && <PageForm handleSubmit={this.submitPageForm} leaderboard={this.state.leaderboard} />}
                 {isArtistFormOpen && <ArtistForm handleSubmit={this.submitArtistForm} />}
+                <h2>Leaderboard</h2>
                 <Table data={groups} />
             </div>
         )
