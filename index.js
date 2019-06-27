@@ -27,15 +27,16 @@ pool.connect((err) => {
     if (err) {
         console.error(err)
     } else {
-        console.log('connected to ' + process.env.DATABASE_URL)
+        console.log('connected to ' + connectionString /*process.env.DATABASE_URL*/)
 
         // initialize tables if not exist
-        const usersQuery = 'CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, img TEXT NOT NULL);'
+        const usersQuery = `CREATE TABLE IF NOT EXISTS users (id SERIAL PRIMARY KEY, artist TEXT NOT NULL UNIQUE);`
         const drawingsQuery = `CREATE TABLE IF NOT EXISTS drawings (
             id SERIAL PRIMARY KEY,
+            image TEXT NOT NULL,
+            pages REAL NOT NULL,
+            date TEXT NOT NULL,
             artist INT NOT NULL,
-            pages FLOAT NOT NULL,
-            date VARCHAR(255) NOT NULL,
             FOREIGN KEY (artist) REFERENCES users(id) ON DELETE CASCADE
         );`
 
@@ -50,68 +51,33 @@ pool.connect((err) => {
     }
 })
 
-// TODO redo all routes but with a postgres
+
+/*
+    Returns an array of Users.
+*/
 app.get('/api/getArtists', (req, res) => {
-    pool.query('SELECT * FROM users;', (err, response) => {
-        if (err) throw err
-        res.status(200).json(response.rows)
+    pool.query('SELECT * FROM users;', (err, out) => {
+        if (err) console.error(err)
+        res.json(out.rows)
     })
 })
 
-/***** Models *****/
 
-const users = { // mapping of user name to array of drawings
-    wang: []
-}
-
-/*
-    Returns an array of serialized drawings for a user.
-*/
-function serializeDrawings(name) {
-    return users[name].map(drawing => drawing.serialize())
-}
-
-/*
-    Returns users with their drawings serialized.
-*/
-function serializeUsers() {
-    res = {}
-    Object.keys(users).forEach(name => {
-        res[name] = serializeDrawings(name)
-    })
-    return res
-}
-
-/***** Routes *****/
-
-app.get('/', (req, res) => {
-    res.json('Hello World!')
-})
-
-/*
-    Returns the users object.
-*/
-/*
-app.get('/api/getArtists', (req, res) => {
-    res.json(serializeUsers(users))
-})
-*/
-
-/* Helper that returns an array of all artist names */
-function getNames() {
-    const names = []
-    Object.keys(users).forEach(name => {
-        names.push(name)
-    })
-    return names
-}
 /*
     Returns an array of artist names.
 */
 app.get('/api/getNames', (req, res) => {
-    names = getNames()
-    res.json(names)
+    pool.query('SELECT artist FROM users;', (err, out) => {
+        if (err) console.error(err)
+
+        const arr = []
+        out.rows.forEach(obj => {
+            arr.push(obj.artist)
+        })
+        res.json(arr)
+    })
 })
+
 
 /*
     Initializes a new artist.
@@ -124,13 +90,18 @@ app.post('/api/addArtist', (req, res) => {
 
     if (!artist) {
         res.status(400).send('ERR: Name cannot be empty')
-    } else if (!Object.keys(users).includes(artist)) {
-        users[artist] = []
-        res.send('POST: artist ' + artist)
-    } else {
-        res.send('User already exists')
     }
+
+    // will end up skipping id numbers if name exists
+    pool.query('INSERT INTO users (artist) VALUES($1) RETURNING *', [artist], (err, out) => {
+        if (err) {
+            res.send('Name already exists')
+        } else {
+            res.status(201).json(out.rows[0])
+        }
+    })
 })
+
 
 /*
     Adds a drawing to the specified user.
@@ -148,92 +119,123 @@ app.post('/api/addDrawing/:name', (req, res) => {
 
     if (!name || !image || !pages || !date) {
         res.status(404).send('ERR: Missing field in body')
-    }
-
-    if (!users[name]) {
-        res.status(404).send('ERR: User not found')
     } else {
-        users[name].push(new Drawing(name, image, pages, date))
-        res.send('POST: drawing ' + image)
+
+    pool.query(`SELECT * FROM users WHERE artist = $1;`, [name])
+    .then(out => {
+        if (out.rows.length === 0) {
+            res.send('artist not found when adding drawing')
+        } else {
+            const artistID = out.rows[0].id
+            pool.query(`
+                INSERT INTO drawings (image, pages, date, artist)
+                VALUES($1, $2, $3, $4)
+                RETURNING *;
+            `, [image, pages, date, artistID])
+            .then(obj => res.status(201).json(obj.rows[0]))
+            .catch(err => res.status(500).send('error inserting drawing'))
+        }
+    })
+    .catch(err => res.status(500).send('error querying artist'))
     }
 })
 
-/* Helper */
-function getAllDrawings() {
-    let out = []
-    Object.keys(users).forEach(name => {
-        out = out.concat(users[name])
-    })
-    return out
-}
+
 /*
     Returns an array of all drawings.
+    Artist field represents the artist's name, not their user id.
 */
 app.get('/api/getDrawings', (req, res) => {
-    res.json(getAllDrawings().map(x => x.serialize()))
+    pool.query(`
+        SELECT drawings.image, drawings.pages, drawings.date, users.artist
+        FROM drawings
+        LEFT JOIN users ON users.id = drawings.artist;`)
+    .then(out => res.json(out.rows))
+    .catch(err => res.status(500).send('error querying drawings'))
 })
 
+
 /*
-    Returns the user with the specified name.
+    Returns an array of drawings with artist = specified name.
 */
 app.get('/api/getDrawingsByArtist/:name', (req, res) => {
     name = req.params.name
-    if (!users[name]) {
-        res.status(404).send('ERR: User not found')
-    } else {
-        res.json(serializeDrawings(name))
-    }
+    pool.query(`
+        SELECT drawings.image, drawings.pages, drawings.date, users.artist
+        FROM drawings
+        LEFT JOIN users ON users.id = drawings.artist
+        WHERE users.artist = $1;`, [name])
+    .then(out => res.json(out.rows))
+    .catch(err => res.status(500).send('error querying drawings by artist name'))
 })
+
 
 /*
-    Returns a mapping of date to an array of drawings.
+    Returns a mapping of a date to an array of drawings.
 */
 app.get('/api/getDrawingsByDate', (req, res) => {
-    const out = {}
-    Object.keys(users).forEach(name => {
-        users[name].forEach(drawing => {
+    const obj = {}
+    pool.query(`
+        SELECT drawings.image, drawings.pages, drawings.date, users.artist
+        FROM drawings
+        LEFT JOIN users ON users.id = drawings.artist;`)
+    .then(out => {
+        out.rows.forEach(drawing => {
             const date = drawing.date
-            if (out[date]) {  // date exists in obj
-                out[date].push(drawing.serialize())
-            } else {
-                out[date] = [drawing.serialize()]
-            }
+            if (obj[date]) obj[date].push(drawing)
+            else obj[date] = [drawing]
         })
+        res.json(obj)
     })
-    res.json(out)
+    .catch(err => res.status(500).send('error querying drawings by date'))
 })
 
-/* Helper that returns the number of pages of a user. */
-function getPages(name) {
-    let total = 0
-    users[name].forEach(drawing => {
-        total += drawing.pages
-    })
-    return total
-}
+
 /*
     Returns the total number of pages an artist has.
 */
-app.get('/api/getPages/:userID', (req, res) => {
-    id = req.params.userID
-    if (!users[id]) {
-        res.status(404).send('ERR: User not found')
-    } else {
-        const total = getPages(id)
+app.get('/api/getPages/:name', (req, res) => {
+    name = req.params.name
+    pool.query(`
+        SELECT drawings.pages
+        FROM drawings
+        LEFT JOIN users ON users.id = drawings.artist
+        WHERE users.artist = $1;`, [name])
+    .then(out => {
+        let total = 0
+        out.rows.forEach(obj => total += obj.pages)
         res.json(total)
-    }
+    })
+    .catch(err => res.status(500).send('error getting total number of pages for ' + name))
 })
 
+
 /*
-    Returns an array of arrays containing the names
-    and total number of pages.
+    Returns an array of arrays containing the names and total number of pages.
 */
-app.get('/api/getLeaderboard', (req, res) => {
-    let out = []
-    Object.keys(users).forEach(name => {
-        out.push([name, getPages(name)])
+app.get('/api/getLeaderboard', async (req, res) => {
+    // get names
+    const leaderboard = []
+    const names = []
+
+    const cur1 = await pool.query('SELECT artist FROM users;')
+    cur1.rows.forEach(obj => {
+        names.push(obj.artist)
     })
-    res.json(out)
+
+    // makes async functions work! avoid forEach :-)
+    for (const name of names) {
+        const cur2 = await pool.query(`
+            SELECT drawings.pages
+            FROM drawings
+            LEFT JOIN users ON users.id = drawings.artist
+            WHERE users.artist = $1;`, [name])
+
+        let total = 0
+        cur2.rows.forEach(obj => total += obj.pages)
+        leaderboard.push([name, total])
+    }
+    res.json(leaderboard)
 })
 
 // handles other requests
