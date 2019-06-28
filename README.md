@@ -2,6 +2,8 @@
 
 Artbook is a React app for sharing art with your friends in the form of a friendly competition. It was originally designed for a one month sketchbook challenge with the winner being the one who drew the most pages.
 
+![artbook_demo](https://res.cloudinary.com/aliciaxw/image/upload/v1561756671/Screen_Shot_2019-06-28_at_5.16.51_PM_ndmflp.png)
+
 ## Getting Started
 Artbook uses the PostgreSQL database matching your user account name, which is set up as a part of installing PostgreSQL. Export the environment variable:
 
